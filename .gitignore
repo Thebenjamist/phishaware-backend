@@ -1,0 +1,5 @@
+node_modules
+.serverless
+.dynamodb
+dynamodb
+*.DS_Store

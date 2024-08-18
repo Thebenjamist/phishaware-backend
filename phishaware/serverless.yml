@@ -5,14 +5,70 @@ app: phishaware-backend
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: phishaware
 
+frameworkVersion: "3"
+
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs16.x
+  profile: personal
+  region: eu-west-2
+  stage: ${self:provider.environment.env}
+  stackName: ${self:service}-${self:provider.environment.env}
+  environment:
+    env: dev
+    userPoolId:
+      Ref: CognitoUserPool
+    userPoolClientId:
+      Ref: CognitoUserPoolClient
+    region: ${self:provider.region}
+
+  httpApi:
+    cors: true
+    authorizers:
+      customAuthorizer:
+        functionName: customAuthorizer
+        type: request
+
+  timeout: 15
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action: "*"
+          Resource: "*"
+  deploymentBucket:
+    name: phishaware-deployment-bucket
+    serverSideEncryption: AES256
 
 functions:
-  hello:
-    handler: handler.hello
-    events:
-      - httpApi:
-          path: /
-          method: get
+  - ${file(resources/functions.yml)}
+
+plugins:
+  - serverless-deployment-bucket
+  - serverless-dynamodb
+  - serverless-offline
+  - serverless-export-env
+
+custom:
+  serverless-dynamodb:
+    stages:
+      - dev
+      - stag
+    start:
+      port: 8001
+      docker: false
+      inMemory: false
+      migrate: true
+      dbPath: "dynamodb"
+
+package:
+  individually: false
+  excludeDevDependencies: true
+  exclude:
+    - .dynamodb/**
+    - dynamodb/**
+
+resources:
+  - ${file(resources/dynamodb.yml)}
+  - ${file(resources/cognito.yml)}

@@ -1,0 +1,16 @@
+hello:
+  handler: handler.hello
+  events:
+    - httpApi:
+        path: /
+        method: get
+        authorizer:
+          name: customAuthorizer
+customAuthorizer:
+  handler: common/authorizer.handler
+refresh:
+  handler: common/authorizer.refresh
+  events:
+    - httpApi:
+        path: /refresh-token
+        method: get

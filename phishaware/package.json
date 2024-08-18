@@ -1,0 +1,12 @@
+{
+  "devDependencies": {
+    "aws-sdk": "^2.1675.0",
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-dynamodb": "^0.2.54",
+    "serverless-export-env": "github:arabold/serverless-export-env",
+    "serverless-offline": "^14.0.0"
+  },
+  "dependencies": {
+    "aws-jwt-verify": "^4.0.1"
+  }
+}
