@@ -6,7 +6,7 @@ const getResponse = (statusCode, message, data = null) => {
     },
     body: JSON.stringify({
       message: message,
-      data: data,
+      data,
     }),
   };
 

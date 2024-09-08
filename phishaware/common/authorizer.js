@@ -2,6 +2,7 @@ const { CognitoJwtVerifier } = require("aws-jwt-verify");
 const AWS = require("aws-sdk");
 require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 const { getResponse } = require("./responses");
+const Dynamo = require("./dynamodb");
 
 exports.handler = async (event) => {
   const token = event.headers.authorization || event.headers.Authorization;
@@ -78,4 +79,20 @@ exports.refresh = async (event) => {
     console.error(err.message);
     return getResponse(500, `Internal Server Error: ${err.message}`);
   }
+};
+
+exports.confirmSignUp = async (event) => {
+  const { userAttributes } = event.request;
+  const user = {
+    id: userAttributes.sub,
+    email: userAttributes.email,
+    firstTimeOpen: true,
+  };
+
+  try {
+    await Dynamo.write(user, "user-table");
+  } catch (err) {
+    console.error(err.message);
+  }
+  return event;
 };

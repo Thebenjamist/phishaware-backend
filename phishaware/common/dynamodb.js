@@ -16,7 +16,7 @@ const documentClient = new AWS.DynamoDB.DocumentClient(options);
 const Dynamo = {
   async get(id, TableName) {
     const params = {
-      TableName: `${TableName}-${env}`,
+      TableName: `${TableName}-phishaware-${env}`,
       Key: {
         id,
       },
@@ -26,7 +26,7 @@ const Dynamo = {
 
     if (!data || !data.Item) {
       throw Error(
-        `There was an error fetching the data of id of ${id} from ${TableName}-${env}`
+        `There was an error fetching the data of id of ${id} from ${TableName}-phishaware-${env}`
       );
     }
 
@@ -39,7 +39,7 @@ const Dynamo = {
       throw new Error("No id in the data");
     }
     const params = {
-      TableName: `${TableName}-${env}`,
+      TableName: `${TableName}-phishaware-${env}`,
       Item: data,
     };
 
@@ -64,7 +64,7 @@ const Dynamo = {
     ExpressionAttributeNames,
   }) {
     const params = {
-      TableName: `${TableName}-${env}`,
+      TableName: `${TableName}-phishaware-${env}`,
       FilterExpression,
       ExpressionAttributeValues,
       ExpressionAttributeNames,
@@ -90,7 +90,7 @@ const Dynamo = {
       throw Error("No id in the data");
     }
     const params = {
-      TableName: `${TableName}-${env}`,
+      TableName: `${TableName}-phishaware-${env}`,
       Key: {
         id,
       },
@@ -110,7 +110,7 @@ const Dynamo = {
     TableName,
   }) {
     const params = {
-      TableName: `${TableName}-${env}`,
+      TableName: `${TableName}-phishaware-${env}`,
       Key,
       UpdateExpression,
       ConditionExpression,

@@ -1,16 +1,53 @@
-hello:
-  handler: handler.hello
+customAuthorizer:
+  handler: common/authorizer.handler
+confirmSignUp:
+  handler: common/authorizer.confirmSignUp
+  events:
+    - cognitoUserPool:
+        pool: phishaware-user-pool-dev
+        trigger: PostConfirmation
+        existing: true
+fetchProfile:
+  handler: functions/user.fetchProfile
   events:
     - httpApi:
-        path: /
+        path: /profile
         method: get
         authorizer:
           name: customAuthorizer
-customAuthorizer:
-  handler: common/authorizer.handler
-refresh:
-  handler: common/authorizer.refresh
+updateFirstTimeOpen:
+  handler: functions/user.updateFirstTimeOpen
   events:
     - httpApi:
-        path: /refresh-token
+        path: /update-first-time-open
         method: get
+        authorizer:
+          name: customAuthorizer
+addInitialEmails:
+  handler: functions/emails.addInitialEmails
+  events:
+    - httpApi:
+        path: /add-initial-emails
+        method: get
+fetchEmails:
+  handler: functions/emails.fetchEmails
+  events:
+    - httpApi:
+        path: /emails
+        method: get
+fetchUserScores:
+  handler: functions/scores.fetchUserScores
+  events:
+    - httpApi:
+        path: /scores
+        method: get
+        authorizer:
+          name: customAuthorizer
+submitScore:
+  handler: functions/scores.submitScore
+  events:
+    - httpApi:
+        path: /submit-score
+        method: post
+        authorizer:
+          name: customAuthorizer
