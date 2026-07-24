@@ -3,3 +3,4 @@ node_modules
 .dynamodb
 dynamodb
 *.DS_Store
+.env
